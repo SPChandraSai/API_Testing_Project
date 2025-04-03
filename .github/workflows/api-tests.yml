@@ -17,7 +17,8 @@ jobs:
         run: newman run API_Testing_Collection.json -r cli,junit --reporter-junit-export results.xml
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
-          name: api-test-results
-          path: results.xml
+            name: api-test-results
+            path: results.xml
+
