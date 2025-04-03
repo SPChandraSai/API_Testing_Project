@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
 
 jobs:
   test:
@@ -18,4 +17,10 @@ jobs:
         run: npm install -g newman
 
       - name: Run Postman API Tests
-        run: newman run "API_Testing_Collection.json" --reporters cli
+        run: newman run your_postman_collection.json -r cli,json --reporter-json-export report.json
+
+      - name: Upload Test Report Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: report.json
