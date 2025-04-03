@@ -1,6 +1,9 @@
-name: API Tests
+name: API Testing Workflow
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   test:
@@ -8,17 +11,25 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Install Newman (Postman CLI)
-        run: npm install -g newman
-
-      - name: Run Postman API Tests
-        run: newman run API_Testing_Collection.json -r cli,junit --reporter-junit-export results.xml
-
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-            name: api-test-results
-            path: results.xml
+          node-version: 18
 
+      - name: Install Newman and Reporters
+        run: |
+          npm install -g newman newman-reporter-json newman-reporter-html
+
+      - name: Run API Tests with Newman
+        run: |
+          newman run API_Testing_Collection.json -r cli,json,html --reporter-json-export results.json --reporter-html-export report.html
+
+      - name: Upload Test Reports (JSON & HTML)
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-test-reports
+          path: |
+            results.json
+            report.html
