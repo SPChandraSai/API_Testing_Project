@@ -1,10 +1,6 @@
 name: API Tests
 
-on:
-  push:
-    branches:
-      - main  # Change this if using a different branch
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   test:
@@ -12,16 +8,16 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Newman (Postman CLI)
         run: npm install -g newman
 
       - name: Run Postman API Tests
-        run: newman run API_Testing_Collection.json -r cli,json --reporter-json-export results.json
+        run: newman run API_Testing_Collection.json -r cli,junit --reporter-junit-export results.xml
 
-      - name: Upload API Test Results
+      - name: Upload Test Results
         uses: actions/upload-artifact@v3
         with:
-          name: postman-test-results
-          path: results.json
+          name: api-test-results
+          path: results.xml
