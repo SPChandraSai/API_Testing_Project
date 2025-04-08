@@ -8,7 +8,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -16,20 +15,19 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
-      - name: Install Newman and Reporters
+      - name: Install Newman and HTML Reporter
         run: |
-          npm install -g newman newman-reporter-json newman-reporter-html
+          npm install -g newman
+          npm install -g newman-reporter-html
 
-      - name: Run API Tests with Newman
+      - name: Run Postman Collection
         run: |
-          newman run API_Testing_Collection.json -r cli,json,html --reporter-json-export results.json --reporter-html-export report.html
+          newman run API_Testing_Collection.json -r cli,html --reporter-html-export result.html
 
-      - name: Upload Test Reports (JSON & HTML)
+      - name: Upload HTML report
         uses: actions/upload-artifact@v3
         with:
-          name: api-test-reports
-          path: |
-            results.json
-            report.html
+          name: html-report
+          path: ./result.html
