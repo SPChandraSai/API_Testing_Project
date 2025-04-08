@@ -27,7 +27,7 @@ jobs:
           newman run postman/API_Testing_Collection.json -r cli,html --reporter-html-export result.html
 
       - name: Upload HTML report
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4
         with:
           name: html-report
           path: ./result.html
